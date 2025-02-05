@@ -20,36 +20,34 @@
             background: #fff;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
 
         h1 {
-            text-align: center;
             color: #007aff;
             font-size: 2rem;
         }
 
-        .countdown-container {
+        .event-container {
             margin-top: 30px;
         }
 
-        .countdown {
-            text-align: center;
+        .event {
             font-size: 1.5rem;
             margin-bottom: 20px;
-            color: #333; /* 文字色を黒に変更 */
+            color: #333;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
             background-color: #f9f9f9;
-            margin-bottom: 15px;
         }
 
-        .countdown span {
+        .event span {
             font-size: 2rem;
             font-weight: bold;
         }
 
-        /* モバイル対応スタイル */
+        /* モバイル対応 */
         @media (max-width: 768px) {
             .container {
                 margin: 20px;
@@ -60,32 +58,24 @@
                 font-size: 1.5rem;
             }
 
-            .countdown {
+            .event {
                 font-size: 1.2rem;
-                padding: 15px;
-                margin-bottom: 10px;
-                text-align: left;
             }
 
-            .countdown span {
+            .event span {
                 font-size: 1.5rem;
-            }
-
-            /* カウントダウンの間隔を詰める */
-            .countdown-container {
-                margin-top: 20px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>大会までのカウントダウン</h1>
-        <div class="countdown-container" id="countdowns"></div>
+        <h1>マラソン大会の日程とカウントダウン</h1>
+        <div class="event-container" id="events"></div>
     </div>
 
     <script>
-        // 大会の日付（仮定）
+        // 大会情報
         const events = [
             { name: "第30回おきなわマラソン", date: new Date("2025-02-16T09:00:00") },
             { name: "さいたまマラソン", date: new Date("2025-03-16T09:00:00") },
@@ -98,7 +88,7 @@
             const timeRemaining = event.date - now;
 
             if (timeRemaining <= 0) {
-                document.getElementById(elementId).innerHTML = `${event.name}: 大会が終了しました`;
+                document.getElementById(elementId).innerHTML = `${event.name} (${event.date.toLocaleDateString()}): 大会が終了しました`;
                 return;
             }
 
@@ -108,28 +98,24 @@
             const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
 
             document.getElementById(elementId).innerHTML =
-                `${event.name}: <span>${days}</span>日 <span>${hours}</span>時間 <span>${minutes}</span>分 <span>${seconds}</span>秒`;
+                `${event.name} (${event.date.toLocaleDateString()}): <span>${days}</span>日 <span>${hours}</span>時間 <span>${minutes}</span>分 <span>${seconds}</span>秒`;
         }
 
-        function displayCountdowns() {
-            const countdownContainer = document.getElementById("countdowns");
+        function displayEvents() {
+            const eventContainer = document.getElementById("events");
 
             events.forEach((event, index) => {
-                const countdownDiv = document.createElement("div");
-                countdownDiv.id = `countdown-${index}`;
-                countdownDiv.classList.add("countdown");
-                countdownContainer.appendChild(countdownDiv);
+                const eventDiv = document.createElement("div");
+                eventDiv.id = `event-${index}`;
+                eventDiv.classList.add("event");
+                eventContainer.appendChild(eventDiv);
 
-                // 最初のカウントダウンを表示
-                updateCountdown(event, `countdown-${index}`);
-
-                // 1秒ごとにカウントダウンを更新
-                setInterval(() => updateCountdown(event, `countdown-${index}`), 1000);
+                updateCountdown(event, `event-${index}`);
+                setInterval(() => updateCountdown(event, `event-${index}`), 1000);
             });
         }
 
-        // 大会カウントダウンを表示
-        displayCountdowns();
+        displayEvents();
     </script>
 </body>
 </html>
